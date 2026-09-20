@@ -338,24 +338,33 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose }) =
           {activeTab === 'apk' && (
             <div className="space-y-3 text-sm text-stone-300">
               <p className="leading-relaxed">
-                If you want the compiled native Android binary (APK) from the modernized code:
+                Choose either automated Cloud build (no Android Studio required) or local Android Studio compile:
               </p>
 
-              <div className="space-y-2.5 bg-stone-950/80 p-4 rounded-xl border border-stone-800">
-                <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs uppercase tracking-wider">
-                  Native Android Project
+              <div className="space-y-2 bg-stone-950/80 p-3.5 rounded-xl border border-stone-800">
+                <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+                  Option A: Automated Cloud Build (GitHub Actions)
                 </div>
-                <ol className="list-decimal list-inside space-y-1.5 text-xs text-stone-300">
-                  <li>In Google AI Studio, click the top-right Settings menu (⚙️) &gt; <strong>Export to ZIP</strong>.</li>
-                  <li>Open the extracted <code className="text-amber-300 bg-stone-800 px-1 py-0.5 rounded">android/</code> folder in Android Studio.</li>
-                  <li>Click <strong>Build &gt; Build Bundle(s) / APK(s) &gt; Build APK(s)</strong>.</li>
-                  <li>Transfer the resulting <code className="text-amber-300 bg-stone-800 px-1 py-0.5 rounded">app-debug.apk</code> to your phone and tap install.</li>
+                <ol className="list-decimal list-inside space-y-1 text-xs text-stone-300">
+                  <li>Click top-right Menu (⚙️) &gt; <strong>Export to GitHub</strong>.</li>
+                  <li>Open the repo on GitHub and click the <strong>Actions</strong> tab.</li>
+                  <li>Click the <strong>Build Android APK</strong> workflow.</li>
+                  <li>Under <strong>Artifacts</strong>, click to download <code className="text-emerald-300 bg-stone-800 px-1 py-0.5 rounded">thirukkural-app-debug-apk</code>.</li>
                 </ol>
               </div>
 
-              <p className="text-xs text-stone-400">
-                Note: Method 1 (Scanning the QR Code) gives you the same experience instantly without needing to install Android Studio or compile Gradle!
-              </p>
+              <div className="space-y-2 bg-stone-950/80 p-3.5 rounded-xl border border-stone-800">
+                <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs uppercase tracking-wider">
+                  Option B: Local Compile via Android Studio
+                </div>
+                <ol className="list-decimal list-inside space-y-1 text-xs text-stone-300">
+                  <li>Click top-right Menu (⚙️) &gt; <strong>Export to ZIP</strong>.</li>
+                  <li>Open the extracted <code className="text-amber-300 bg-stone-800 px-1 py-0.5 rounded">android/</code> folder in Android Studio.</li>
+                  <li>Colors and dimens (<code className="text-stone-300">@color/colorPrimary</code>, etc.) are already defined.</li>
+                  <li>Click <strong>Build &gt; Build Bundle(s) / APK(s) &gt; Build APK(s)</strong>.</li>
+                  <li>Locate <code className="text-amber-300 bg-stone-800 px-1 py-0.5 rounded">app-debug.apk</code> and install on phone.</li>
+                </ol>
+              </div>
             </div>
           )}
         </div>

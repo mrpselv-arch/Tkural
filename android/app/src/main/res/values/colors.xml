@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <!-- Thirukkural App Palette -->
+    <color name="colorPrimary">#B45309</color>
+    <color name="colorPrimaryDark">#78350F</color>
+    <color name="colorAccent">#D97706</color>
+    
+    <!-- Neutral & Utility Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="window_background">#FAFAF9</color>
+    <color name="text_primary">#1C1917</color>
+    <color name="text_secondary">#78716C</color>
+    <color name="divider">#E7E5E4</color>
 </resources>

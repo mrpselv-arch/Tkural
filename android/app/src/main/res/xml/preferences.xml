@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="Notifications">
+        <SwitchPreferenceCompat
+            app:key="@string/prefDailyKuralNotification"
+            app:title="Daily Couplet Notification"
+            app:summary="Receive a daily Thirukkural couplet notification at 8:00 AM"
+            app:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
