@@ -12,6 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,13 +24,15 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.webkit.WebViewAssetLoader;
 
 import com.google.android.material.navigation.NavigationView;
 
 import com.ext.techapp.thirukkural.preference.SettingsActivity;
-import com.ext.techapp.thirukkural.search.SearchActivity;
 import com.ext.techapp.thirukkural.xml.CoupletsXMLParser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.StringTokenizer;
 
 public class NavigationActivity extends AppCompatActivity
@@ -39,6 +46,8 @@ public class NavigationActivity extends AppCompatActivity
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
+    private WebView mWebView;
+    private int pendingChapterId = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,49 +69,92 @@ public class NavigationActivity extends AppCompatActivity
         // Android 13+ / 14 notification permission check
         checkNotificationPermission();
 
-        // Load chapter from intent extras or default to Chapter 1
+        // Check if intent specified a chapter
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey(ItemListFragment.NAV_ITEM_ID)) {
-            int itemId = bundle.getInt(ItemListFragment.NAV_ITEM_ID, 1);
-            loadChapter(itemId);
-        } else {
-            loadChapter(1);
+            pendingChapterId = bundle.getInt(ItemListFragment.NAV_ITEM_ID, 1);
         }
+
+        setupWebView();
     }
 
-    public void loadChapter(int chapterNum) {
-        if (chapterNum < 1) chapterNum = 1;
-        if (chapterNum > 133) chapterNum = 133;
+    private void setupWebView() {
+        mWebView = findViewById(R.id.main_webview);
+        if (mWebView == null) return;
 
-        int resId = getResourceId("chapter_" + chapterNum, "id", getPackageName());
-
-        String title = "அதிகாரம் " + chapterNum;
-        if (navigationView != null && navigationView.getMenu() != null) {
-            MenuItem item = (resId != 0) ? navigationView.getMenu().findItem(resId) : null;
-            if (item != null) {
-                title = item.getTitle().toString();
-                item.setChecked(true);
-            } else if (chapterNum < navigationView.getMenu().size()) {
-                MenuItem itemByIndex = navigationView.getMenu().getItem(chapterNum);
-                if (itemByIndex != null) {
-                    title = itemByIndex.getTitle().toString();
-                    itemByIndex.setChecked(true);
-                }
-            }
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setLoadsImagesAutomatically(true);
+        settings.setMediaPlaybackRequiresUserGesture(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
-        setTitle(title);
+        final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .build();
 
-        ItemListFragment listFragment = new ItemListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ItemListFragment.NAV_ITEM_ID, resId != 0 ? resId : chapterNum);
-        bundle.putString(ItemListFragment.NAV_CHAPTER, String.valueOf(chapterNum));
-        bundle.putString(ItemListFragment.NAV_ITEM_TITLE, title);
-        listFragment.setArguments(bundle);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                Uri url = request.getUrl();
+                WebResourceResponse response = assetLoader.shouldInterceptRequest(url);
+                if (response != null) {
+                    return response;
+                }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.item_list_fragment_layout, listFragment)
-                .commit();
+                // Fallback interception for root and relative asset requests
+                String path = url.getPath();
+                if (path != null) {
+                    String assetPath = path.startsWith("/") ? path.substring(1) : path;
+                    if (assetPath.startsWith("assets/")) {
+                        assetPath = assetPath.substring(7);
+                    }
+                    try {
+                        InputStream is = getAssets().open(assetPath);
+                        String mimeType = "text/plain";
+                        if (assetPath.endsWith(".html")) mimeType = "text/html";
+                        else if (assetPath.endsWith(".js")) mimeType = "application/javascript";
+                        else if (assetPath.endsWith(".css")) mimeType = "text/css";
+                        else if (assetPath.endsWith(".json")) mimeType = "application/json";
+                        else if (assetPath.endsWith(".png")) mimeType = "image/png";
+                        else if (assetPath.endsWith(".svg")) mimeType = "image/svg+xml";
+                        else if (assetPath.endsWith(".jpg") || assetPath.endsWith(".jpeg")) mimeType = "image/jpeg";
+                        return new WebResourceResponse(mimeType, "UTF-8", is);
+                    } catch (IOException ignored) {
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (pendingChapterId > 1) {
+                    view.evaluateJavascript("if (window.openChapter) { window.openChapter(" + pendingChapterId + "); }", null);
+                }
+            }
+        });
+
+        // Bridge for native Android integration
+        mWebView.addJavascriptInterface(new Object() {
+            @android.webkit.JavascriptInterface
+            public void shareCouplet(String text) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, "திருக்குறள்");
+                startActivity(shareIntent);
+            }
+        }, "AndroidBridge");
+
+        // Load the modern production web app
+        mWebView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
     }
 
     private void checkNotificationPermission() {
@@ -113,19 +165,12 @@ public class NavigationActivity extends AppCompatActivity
         }
     }
 
-    public int getResourceId(String pVariableName, String pResourcename, String pPackageName) {
-        try {
-            return getResources().getIdentifier(pVariableName, pResourcename, pPackageName);
-        } catch (Exception e) {
-            Log.e(TAG, "Error getting resource identifier", e);
-            return 0;
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (mWebView != null && mWebView.canGoBack()) {
+            mWebView.goBack();
         } else {
             super.onBackPressed();
         }
@@ -165,17 +210,9 @@ public class NavigationActivity extends AppCompatActivity
         setTitle(item.getTitle());
 
         if (id == R.id.thiruvalluvar) {
-            AboutFragment about = new AboutFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(AboutFragment.ABOUT_TEXT_ID, id);
-            about.setArguments(bundle);
-            if (navigationView != null) {
-                MenuItem thiruItem = navigationView.getMenu().findItem(R.id.thiruvalluvar);
-                if (thiruItem != null) thiruItem.setChecked(true);
+            if (mWebView != null) {
+                mWebView.evaluateJavascript("if (window.openAbout) { window.openAbout(); }", null);
             }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_list_fragment_layout, about)
-                    .commit();
         } else {
             String title = item.getTitle() != null ? item.getTitle().toString() : "";
             StringTokenizer tokens = new StringTokenizer(title, ".");
@@ -183,7 +220,9 @@ public class NavigationActivity extends AppCompatActivity
                 String chapter_code = tokens.nextToken().trim();
                 try {
                     int chapNum = Integer.parseInt(chapter_code);
-                    loadChapter(chapNum);
+                    if (mWebView != null) {
+                        mWebView.evaluateJavascript("if (window.openChapter) { window.openChapter(" + chapNum + "); }", null);
+                    }
                 } catch (NumberFormatException e) {
                     Log.e(TAG, "Error parsing chapter number from title: " + title, e);
                 }
@@ -198,10 +237,10 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(int id, CoupletsXMLParser.Couplet couplet) {
-        Intent intent = new Intent(this, ItemDetailActivity.class);
-        intent.putExtra("couplet_number", couplet != null ? couplet.getCoupletNumber() : String.valueOf(id));
-        intent.putExtra("selected_couplet", couplet);
-        startActivity(intent);
+        if (mWebView != null) {
+            int chap = (id - 1) / 10 + 1;
+            mWebView.evaluateJavascript("if (window.openChapter) { window.openChapter(" + chap + "); }", null);
+        }
     }
 
     @Override
@@ -210,10 +249,9 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.setAction(Intent.ACTION_SEARCH);
-        intent.putExtra(SearchManager.QUERY, query);
-        startActivity(intent);
+        if (mWebView != null) {
+            mWebView.evaluateJavascript("if (window.openSearch) { window.openSearch(); }", null);
+        }
         return true;
     }
 

@@ -81,24 +81,48 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
+    (window as any).openTab = (tab: TabType) => {
+      setCurrentTab(tab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    (window as any).openAbout = () => {
+      setCurrentTab('about');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    (window as any).openSearch = () => {
+      setCurrentTab('search');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
   }, []);
 
   // Fetch Thirukkural data
   useEffect(() => {
-    fetch('/data/thirukkural.json')
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-        return res.json();
-      })
-      .then((jsonData: ThirukkuralData) => {
-        setData(jsonData);
+    const loadData = async () => {
+      const candidates = ['./data/thirukkural.json', 'data/thirukkural.json', '/data/thirukkural.json'];
+      let loadedData: ThirukkuralData | null = null;
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            loadedData = await res.json();
+            break;
+          }
+        } catch {
+          // try next candidate
+        }
+      }
+
+      if (loadedData) {
+        setData(loadedData);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to load Thirukkural data:', err);
+      } else {
+        console.error('Failed to load Thirukkural data from candidates');
         setError('Failed to load Thirukkural data. Please refresh or check the server.');
         setLoading(false);
-      });
+      }
+    };
+
+    loadData();
   }, []);
 
   // Precompute flattened couplets list with chapter info
