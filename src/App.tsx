@@ -14,7 +14,8 @@ import { SavedView } from './components/SavedView';
 import { AboutView } from './components/AboutView';
 import { ReaderToolbar } from './components/ReaderToolbar';
 import { notificationManager } from './utils/notificationManager';
-import { Layers, ChevronLeft, ChevronRight, BookOpen, AlertCircle, Sparkles, Hash, ArrowRight, ArrowDown, Globe } from 'lucide-react';
+import { kuralAudio } from './utils/audioPlayer';
+import { Layers, ChevronLeft, ChevronRight, BookOpen, AlertCircle, Sparkles, Hash, ArrowRight, ArrowDown, Globe, Download, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function App() {
   const [data, setData] = useState<ThirukkuralData | null>(null);
@@ -60,6 +61,33 @@ export default function App() {
       return [];
     }
   });
+
+  // Offline Chapter Audio Caching state
+  const [downloadingChapterId, setDownloadingChapterId] = useState<number | null>(null);
+  const [downloadProgress, setDownloadProgress] = useState<{ current: number; total: number } | null>(null);
+  const [cacheTick, setCacheTick] = useState(0);
+
+  useEffect(() => {
+    return kuralAudio.subscribeCache(() => {
+      setCacheTick((prev) => prev + 1);
+    });
+  }, []);
+
+  const handleDownloadChapterAudio = async (chapter: Chapter) => {
+    if (downloadingChapterId) return;
+    setDownloadingChapterId(chapter.id);
+    const total = chapter.couplets.length;
+    setDownloadProgress({ current: 0, total });
+
+    for (let i = 0; i < total; i++) {
+      const couplet = chapter.couplets[i];
+      setDownloadProgress({ current: i + 1, total });
+      await kuralAudio.prefetchCoupletAudio(couplet.id, couplet.line1, couplet.line2);
+    }
+
+    setDownloadingChapterId(null);
+    setDownloadProgress(null);
+  };
 
   useEffect(() => {
     try {
@@ -506,6 +534,52 @@ export default function App() {
                                   {currentChapter.nameEnglish} • குறள்கள் {currentChapter.startCouplet} - {currentChapter.endCouplet} (10 குறள்கள்)
                                 </p>
                               </>
+                            )}
+                          </div>
+
+                          {/* Offline Audio Caching Action for the 10 Couplets */}
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {currentChapter.couplets.every((c) => kuralAudio.isCached(c.id)) ? (
+                              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>
+                                  {languageMode === 'en'
+                                    ? 'Saved for Offline (10/10)'
+                                    : 'ஆஃப்லைனில் தயார் (10/10)'}
+                                </span>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                disabled={downloadingChapterId === currentChapter.id}
+                                onClick={() => handleDownloadChapterAudio(currentChapter)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F2F2F7] hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 border border-[#E5E5EA] text-[#1C1C1E] text-xs font-semibold transition-all cursor-pointer disabled:opacity-60 active:scale-95"
+                                title={
+                                  languageMode === 'en'
+                                    ? 'Save all 10 couplets for offline listening without internet'
+                                    : 'இணையம் இல்லாமல் கேட்க 10 குறள்களின் ஒலியையும் ஆஃப்லைனில் சேமிக்கவும்'
+                                }
+                              >
+                                {downloadingChapterId === currentChapter.id ? (
+                                  <>
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin text-orange-600" />
+                                    <span>
+                                      {languageMode === 'en'
+                                        ? `Saving (${downloadProgress?.current || 0}/10)...`
+                                        : `சேமிக்கிறது (${downloadProgress?.current || 0}/10)...`}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Download className="w-3.5 h-3.5 text-orange-600" />
+                                    <span>
+                                      {languageMode === 'en'
+                                        ? `Download Audio for Offline (${currentChapter.couplets.filter((c) => kuralAudio.isCached(c.id)).length}/10)`
+                                        : `ஆஃப்லைன் ஒலி சேமி (${currentChapter.couplets.filter((c) => kuralAudio.isCached(c.id)).length}/10)`}
+                                    </span>
+                                  </>
+                                )}
+                              </button>
                             )}
                           </div>
                         </div>

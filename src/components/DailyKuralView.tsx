@@ -35,6 +35,7 @@ export const DailyKuralView: React.FC<DailyKuralViewProps> = ({
   const [currentKuralId, setCurrentKuralId] = useState<number>(defaultDailyId);
   const [copied, setCopied] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isAudioCached, setIsAudioCached] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(() =>
     notificationManager.getSettings()
@@ -56,9 +57,17 @@ export const DailyKuralView: React.FC<DailyKuralViewProps> = ({
 
   useEffect(() => {
     if (!currentCoupletData) return;
-    return kuralAudio.subscribe((playingId) => {
+    setIsAudioCached(kuralAudio.isCached(currentCoupletData.couplet.id));
+    const unsubAudio = kuralAudio.subscribe((playingId) => {
       setIsPlayingAudio(playingId === currentCoupletData.couplet.id);
     });
+    const unsubCache = kuralAudio.subscribeCache(() => {
+      setIsAudioCached(kuralAudio.isCached(currentCoupletData.couplet.id));
+    });
+    return () => {
+      unsubAudio();
+      unsubCache();
+    };
   }, [currentCoupletData]);
 
   const handleRandomKural = () => {
@@ -382,12 +391,30 @@ ${couplet.explanation}`;
             <button
               type="button"
               onClick={handleSpeech}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
+              className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
                 isPlayingAudio ? 'bg-orange-500 text-white shadow-xs' : 'bg-white border border-[#E5E5EA] text-[#3C3C43] hover:bg-[#F2F2F7]'
               }`}
-              title={isEnglish ? 'Listen' : 'கேட்க'}
+              title={
+                isEnglish
+                  ? isPlayingAudio
+                    ? 'Stop recitation'
+                    : isAudioCached
+                    ? 'Listen (Saved for Offline)'
+                    : 'Listen'
+                  : isPlayingAudio
+                  ? 'ஒலியை நிறுத்து'
+                  : isAudioCached
+                  ? 'கேட்க (ஆஃப்லைனில் சேமிக்கப்பட்டுள்ளது)'
+                  : 'கேட்க'
+              }
             >
               {isPlayingAudio ? <VolumeX className="w-4 h-4 animate-pulse" /> : <Volume2 className="w-4 h-4 text-orange-600" />}
+              {isAudioCached && !isPlayingAudio && (
+                <span
+                  className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-500 rounded-full ring-1 ring-white"
+                  title={isEnglish ? 'Saved for offline' : 'ஆஃப்லைனில் தயார்'}
+                />
+              )}
             </button>
             <button
               type="button"

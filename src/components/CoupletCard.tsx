@@ -28,10 +28,17 @@ export const CoupletCard: React.FC<CoupletCardProps> = ({
   const [copied, setCopied] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isInlineExpanded, setIsInlineExpanded] = useState(false);
+  const [isCached, setIsCached] = useState(() => kuralAudio.isCached(couplet.id));
 
   useEffect(() => {
     return kuralAudio.subscribe((playingId) => {
       setIsPlayingAudio(playingId === couplet.id);
+    });
+  }, [couplet.id]);
+
+  useEffect(() => {
+    return kuralAudio.subscribeCache(() => {
+      setIsCached(kuralAudio.isCached(couplet.id));
     });
   }, [couplet.id]);
 
@@ -114,16 +121,34 @@ ${couplet.explanation}`;
 
           {/* Circular iOS Action Buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0 ml-auto">
-            {/* Audio Button (Accurate Native Tamil Recitation) */}
+            {/* Audio Button (Accurate Native Tamil Recitation + Offline Storage) */}
             <button
               type="button"
               onClick={handleSpeech}
-              className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
+              className={`relative w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
                 isPlayingAudio ? 'bg-orange-500 text-white shadow-xs' : 'bg-[#E5E5EA]/70 hover:bg-[#E5E5EA] text-[#3C3C43]'
               }`}
-              title={languageMode === 'en' ? (isPlayingAudio ? 'Stop audio' : 'Listen with pronunciation') : (isPlayingAudio ? 'ஒலியை நிறுத்து' : 'தூய தமிழ் உச்சரிப்பில் குறளைக் கேட்க')}
+              title={
+                languageMode === 'en'
+                  ? isPlayingAudio
+                    ? 'Stop recitation'
+                    : isCached
+                    ? 'Listen (Saved for 100% Offline Playback)'
+                    : 'Listen with authentic pronunciation'
+                  : isPlayingAudio
+                  ? 'ஒலியை நிறுத்து'
+                  : isCached
+                  ? 'கேட்க (ஆஃப்லைனில் சேமிக்கப்பட்டுள்ளது - இணையம் தேவையில்லை)'
+                  : 'தூய தமிழ் உச்சரிப்பில் குறளைக் கேட்க'
+              }
             >
               {isPlayingAudio ? <VolumeX className="w-3.5 h-3.5 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
+              {isCached && !isPlayingAudio && (
+                <span
+                  className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-500 rounded-full ring-1 ring-white"
+                  title={languageMode === 'en' ? 'Saved for offline playback' : 'ஆஃப்லைனில் கிடைக்கும்'}
+                />
+              )}
             </button>
 
             {/* Copy Button */}
