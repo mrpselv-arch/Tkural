@@ -1,0 +1,222 @@
+<resources>
+    <string name="app_name">Thirukkural</string>
+    <string name="thirukkural">திருக்குறள்</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_navigation">திருக்குறள்</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="thiruvalluvar">திருவள்ளுவர் </string>
+    <string name="share_kural">Share</string>
+
+    <!-- strings for the menu display -->
+    <string name="chapter_1">1.கடவுள் வாழ்த்து</string>
+    <string name="chapter_2">2.வான் சிறப்பு</string>
+    <string name="chapter_3">3.நீத்தார் பெருமை</string>
+    <string name="chapter_4">4.அரண் வலியுறுத்தல்</string>
+    <string name="chapter_5">5.இல்வாழ்க்கை</string>
+    <string name="chapter_6">6.வாழ்க்கைத் துணைநலம்</string>
+    <string name="chapter_7">7.மக்கட்பேறு</string>
+    <string name="chapter_8">8.அன்புடைமை</string>
+    <string name="chapter_9">9.விருந்தோம்பல்</string>
+    <string name="chapter_10">10.இனியவை கூறல்</string>
+    <string name="chapter_11">11.செய்ந்நன்றி அறிதல்</string>
+    <string name="chapter_12">12.நடுவு நிலைமை</string>
+    <string name="chapter_13">13.அடக்கமுடைமை</string>
+    <string name="chapter_14">14.ஒழுக்கமுடைமை</string>
+    <string name="chapter_15">15.பிறனில் விழையாமை</string>
+    <string name="chapter_16">16.பொறையுடைமை</string>
+    <string name="chapter_17">17.அழுக்காறாமை</string>
+    <string name="chapter_18">18.வெஃகாமை</string>
+    <string name="chapter_19">19.புறங்கூறாமை</string>
+    <string name="chapter_20">20.பயனில சொல்லாமை</string>
+    <string name="chapter_21">21.தீவினையச்சம்</string>
+    <string name="chapter_22">22.ஒப்புரவறிதல்</string>
+    <string name="chapter_23">23.ஈகை</string>
+    <string name="chapter_24">24.புகழ்</string>
+    <string name="chapter_25">25.அருளுடைமை</string>
+    <string name="chapter_26">26.புலால் மறுத்தல்</string>
+    <string name="chapter_27">27.தவம்</string>
+    <string name="chapter_28">28.கூடா ஒழுக்கம்</string>
+    <string name="chapter_29">29.கள்ளாமை</string>
+    <string name="chapter_30">30.வாய்மை</string>
+    <string name="chapter_31">31.வெகுளாமை</string>
+    <string name="chapter_32">32.இன்னா செய்யாமை</string>
+    <string name="chapter_33">33.கொல்லாமை</string>
+    <string name="chapter_34">34.நிலையாமை</string>
+    <string name="chapter_35">35.துறவு</string>
+    <string name="chapter_36">36.மெய்யுணர்தல்</string>
+    <string name="chapter_37">37.அவா அறுத்தல்</string>
+    <string name="chapter_38">38.ஊழ்</string>
+    <string name="chapter_39">39.இறைமாட்சி</string>
+    <string name="chapter_40">40.கல்வி</string>
+    <string name="chapter_41">41.கல்லாமை</string>
+    <string name="chapter_42">42.கேள்வி</string>
+    <string name="chapter_43">43.அறிவுடைமை</string>
+    <string name="chapter_44">44.குற்றங்கடிதல்</string>
+    <string name="chapter_45">45.பெரியாரைத் துணைக்கோடல்</string>
+    <string name="chapter_46">46.சிற்றினம் சேராமை</string>
+    <string name="chapter_47">47.தெரிந்து செயல்வகை</string>
+    <string name="chapter_48">48.வலியறிதல்</string>
+    <string name="chapter_49">49.காலம் அறிதல்</string>
+    <string name="chapter_50">50.இடன் அறிதல்</string>
+    <string name="chapter_51">51.தெரிந்து தெளிதல்</string>
+    <string name="chapter_52">52.தெரிந்து வினையாடல்</string>
+    <string name="chapter_53">53.சுற்றந் தழால்</string>
+    <string name="chapter_54">54.பொச்சாவாமை</string>
+    <string name="chapter_55">55.செங்கோன்மை</string>
+    <string name="chapter_56">56.கொடுங்கோன்மை</string>
+    <string name="chapter_57">57.வெருவந்த செய்யாமை</string>
+    <string name="chapter_58">58.கண்ணோட்டம்</string>
+    <string name="chapter_59">59.ஒற்றாடல்</string>
+    <string name="chapter_60">60.ஊக்கம் உடைமை</string>
+    <string name="chapter_61">61.மடி இன்மை</string>
+    <string name="chapter_62">62.ஆள்வினை உடைமை</string>
+    <string name="chapter_63">63.இடுக்கண் அழியாமை</string>
+    <string name="chapter_64">64.அமைச்சு</string>
+    <string name="chapter_65">65.சொல்வன்மை</string>
+    <string name="chapter_66">66.வினைத்தூய்மை</string>
+    <string name="chapter_67">67.வினைத்திட்பம்</string>
+    <string name="chapter_68">68.வினைசெயல்வகை</string>
+    <string name="chapter_69">69.தூது</string>
+    <string name="chapter_70">70.மன்னரைச் சேர்ந்தொழுகல்</string>
+    <string name="chapter_71">71.குறிப்பறிதல்</string>
+    <string name="chapter_72">72.அவை அறிதல்</string>
+    <string name="chapter_73">73.அவை அஞ்சாமை</string>
+    <string name="chapter_74">74.நாடு</string>
+    <string name="chapter_75">75.அரண்</string>
+    <string name="chapter_76">76.பொருள் செயல் வகை</string>
+    <string name="chapter_77">77.படைமாட்சி</string>
+    <string name="chapter_78">78.படைச் செருக்கு</string>
+    <string name="chapter_79">79.நட்பு</string>
+    <string name="chapter_80">80.நட்பாராய்தல்</string>
+    <string name="chapter_81">81.பழைமை</string>
+    <string name="chapter_82">82.தீ நட்பு</string>
+    <string name="chapter_83">83.கூடா நட்பு</string>
+    <string name="chapter_84">84.பேதைமை</string>
+    <string name="chapter_85">85.புல்லறிவாண்மை</string>
+    <string name="chapter_86">86.இகல்</string>
+    <string name="chapter_87">87.பகைமாட்சி</string>
+    <string name="chapter_88">88.பகைத்திறம் தெரிதல்</string>
+    <string name="chapter_89">89.உட்பகை</string>
+    <string name="chapter_90">90.பெரியாரைப் பிழையாமை</string>
+    <string name="chapter_91">91.பெண்வழிச் சேரல்</string>
+    <string name="chapter_92">92.வரைவின் மகளிர்</string>
+    <string name="chapter_93">93.கள்ளுண்ணாமை</string>
+    <string name="chapter_94">94.சூது</string>
+    <string name="chapter_95">95.மருந்து</string>
+    <string name="chapter_96">96.குடிமை</string>
+    <string name="chapter_97">97.மானம்</string>
+    <string name="chapter_98">98.பெருமை</string>
+    <string name="chapter_99">99.சான்றாண்மை</string>
+    <string name="chapter_100">100.பண்புடைமை</string>
+    <string name="chapter_101">101.நன்றியில் செல்வம்</string>
+    <string name="chapter_102">102.நாணுடைமை</string>
+    <string name="chapter_103">103.குடிசெயல் வகை</string>
+    <string name="chapter_104">104.உழவு</string>
+    <string name="chapter_105">105.நல்குரவு</string>
+    <string name="chapter_106">106.இரவு</string>
+    <string name="chapter_107">107.இரவச்சம்</string>
+    <string name="chapter_108">108.கயமை</string>
+    <string name="chapter_109">109.தகையணங்குறுத்தல்</string>
+    <string name="chapter_110">110.குறிப்பறிதல்</string>
+    <string name="chapter_111">111.புணர்ச்சி மகிழ்தல்</string>
+    <string name="chapter_112">112.நலம் புனைந்துரைத்தல்</string>
+    <string name="chapter_113">113.காதற் சிறப்புரைத்தல்</string>
+    <string name="chapter_114">114.நாணுத் துறவுரைத்தல்</string>
+    <string name="chapter_115">115.அலர் அறிவுறுத்தல்</string>
+    <string name="chapter_116">116.பிரிவாற்றாமை</string>
+    <string name="chapter_117">117.படர்மெலிந் திரங்கல்</string>
+    <string name="chapter_118">118.கண்விதுப்பழிதல்</string>
+    <string name="chapter_119">119.பசப்புறு பருவரல்</string>
+    <string name="chapter_120">120.தனிப்படர் மிகுதி</string>
+    <string name="chapter_121">121.நினைந்தவர் புலம்பல்</string>
+    <string name="chapter_122">122.கனவுநிலை உரைத்தல்</string>
+    <string name="chapter_123">123.பொழுதுகண்டு இரங்கல்</string>
+    <string name="chapter_124">124.உறுப்புநலன் அழிதல்</string>
+    <string name="chapter_125">125.நெஞ்சோடு கிளத்தல்</string>
+    <string name="chapter_126">126.நிறையழிதல்</string>
+    <string name="chapter_127">127.அவர்வயின் விதும்பல்</string>
+    <string name="chapter_128">128.குறிப்பறிவுறுத்தல்</string>
+    <string name="chapter_129">129.புணர்ச்சி விதும்பல்</string>
+    <string name="chapter_130">130.நெஞ்சோடு புலத்தல்</string>
+    <string name="chapter_131">131.புலவி</string>
+    <string name="chapter_132">132.புலவி நுணுக்கம்</string>
+    <string name="chapter_133">133.ஊடலுவகை</string>
+
+
+    <string name="title_activity_item_detail">ItemDetailActivity</string>
+
+    <string name="about_thiruvalluvar">
+      <br/> திருக்குறள் என்னும் நூலை இயற்றிய தமிழ்ப்புலவர் . உலக தத்துவங்கள் அனைத்தையும் ஈரடிக் குறளில் சொன்ன தத்துவ மேதை.
+
+\n<br/>இவர் கிறித்துக்கு 2 ஆண்டுகளுக்கு முன் பிறந்தவர் என்றும் ,கிறித்துவுக்கு 8 ஆண்டுகளுக்கு பின் பிறந்தவர் என்றும்  , நெசவுத் தொழில் செய்து வந்ததாகவும் சொல்லப்படுகிறது.
+
+\n<br/>மதுரையில் பிறந்ததாகவும், சென்னையில் உள்ள மயிலாப்பூரில் பிறந்ததாகவும் சிலர்  கூறுகின்றனர். மேலும், அவர் ஆதி – பகவன் என்ற பெற்றோருக்குப் பிறந்ததாகவும் ,
+        இவருக்கு வாசுகி என்ற மனைவி இருந்தாகவும் சொல்கின்றனர். ஆனால், இதுவரை இவை எதுவுமே உறுதி செய்யப்படவில்லை.
+\n<br/><br/>இவர் உலக மக்களால், தெய்வப்புலவர், பொய்யில் புலவர், நாயனார், தேவர், செந்நாப்போதர், பெருநாவலர், பொய்யாமொழிப் புலவர் என்றெல்லாம் பல பெயர்களில் அழைக்கப்படுகிறார்.
+
+        \n\n<b>Translation</b>\n
+\n<br/>Thiruvalluvar was a celebrated Tamil poet and philosopher whose contribution to Tamil literature is the Thirukkural, a work on ethics.
+\n<br/>Thiruvalluvar is thought to have lived sometime between the 2nd century BC and the 8th century AD.
+\n<br/>This estimate is based on linguistic analysis of his writings, as there is no archaeological evidence for when he lived.
+\n<br/>He is sometimes also called Theiva Pulavar ("Divine Poet"), Valluvar, Poyyamozhi Pulavar, Senna Pothar, Gnana Vettiyan or Ayyan.
+
+\n<br/>There are several claims regarding where he lived, but none of them have been verified. One legend associates him with Madurai, the ancient capital of the Pandya rulers who vigorously promoted Tamil literature. According to another he was born and not lived in Mylapore, a part of present day Madras, and traveled to Madurai to submit the Thirukural, for approval of the king (Pandian) and his college of poets.
+
+
+    </string>
+
+    <string name="about_thirukkural">
+<br/>திருக்குறள் உலகப் புகழ் பெற்ற ஓர் தமிழ் இலக்கியம். இந்நூல் , ஏறக்குறைய 2000 ஆண்டுகளுக்கு முற்பட்டதாக கருதப்பட்டாலும், இயற்றப்பட்ட காலம் இன்னும் சரியாக வரையறுக்கப்படவில்லை.
+\n
+<br/>திருக்குறளுக்கு உலகப் பொது மறை, முப்பால், ஈரடி நூல், உத்தரவேதம், தெய்வநூல், பொதுமறை, பொய்யாமொழி, வாயுறை வாழ்த்து, தமிழ் மறை, திருவள்ளுவம் என்று வேறு பல பெயர்களும் உண்டு.
+இரண்டே அடிகளில் உலகத் தத்துவங்களைச் சொன்னதால் இதற்கு ஈரடி நூல் என்றும்,அறம், பொருள்,காமம் என்னும் முப்பெரும் பிரிவுகளைக் கொண்டதால், முப்பால் என்றும் அழைக்கப்படுகிறது .
+\n
+<br/>இந்நூல் அறத்துப்பால், பொருட்பால் மற்றும் காமத்துப்பால் (இன்பத்துப்பால்) என்னும் மூன்று பிரிவுகளைக் கொண்டது.<br/>
+\n
+• அறத்துப்பால் – முதல் பிரிவான அறத்துப்பாலில் மனசாட்சி மற்றும் மரியாதை, நல்ல நடத்தை போன்றவற்றை பாயிரவியல், இல்லறவியல், துறவறவியல், ஊழியல் என்ற உட்பிரிவுகளில் தெளிவாக எடுத்துரைக்கிறார்.<br/>\n
+• பொருட்பால் – இரண்டாவது பிரிவான பொருட்பாலில் உலக விவகாரங்களில் எவ்வாறு சரியான முறையில் நடந்து கொள்வது என்பதை அரசியல், அமைச்சியல், அங்கவியல், ஒழிபியல் போன்ற உட்பிரிவுகளில் விளக்கியுள்ளார்.<br/>\n
+• இன்பத்துப்பால் – மூன்றாவது பிரிவான இன்பத்துப்பால் அல்லது காமத்துப்பாலில், ஆண்கள் மற்றும் பெண்களுக்கிடையேயான காதல் மற்றும் இன்பத்தைத் தெளிவாக களவியல், கற்பியல் என்ற தலைப்புகளில் எடுத்துரைக்கிறார்.<br/>\n
+\n
+முதல் பிரிவில் 38 அதிகாரங்களும், இரண்டாவது பிரிவில் 70 அதிகாரங்களும் மற்றும் மூன்றாவது பிரிவில் 25 அதிகாரங்களும் உள்ளன.
+        ஒவ்வொரு அதிகாரத்திலும் பத்து  குறள்கள் என மொத்தம் 1330 குறள்கள் உள்ளன.\n\n\n
+    \n\n<b>Translation</b>\n
+        Thirukkural is one of the most revered ancient works in the Tamil language. It is considered a \'common creed\',
+        providing a guide for human morals and betterment in life. Thirukkural has been translated into several languages,
+        including a translation into Latin by Constanzo Beschi in 1730, which helped make the work known to European intellectuals.
+
+        \nThirukkuṛaḷ is a combined word formed by joining the two words Thiru
+        (meaning revered) and Kural (is a form of poem writing style, like Ballad English Poems.
+        Other forms of poem writing styles in Tamil are Venpa, Yaappu etc.).
+
+        \nThirukkuṛaḷ is divided into three sections:\n\n
+        • section one deals with Aram,good ethical behavior with conscience and honor ("right conduct"); \n
+        • section two discusses Porul,the right manner of conducting worldly affairs; \n
+        • and section three dwells on Kaamam,love between men and women.
+        The first section has 38 chapters, the second 70 chapters and the third 25 chapters.
+        Each chapter consists of 10 couplets or kurals, for a total of 1330 couplets.
+        \nAlthough two sections, Aram and Inbam, are devoted to the private life of an individual more than half the couplets in Thirukural are grouped under Porul
+        which discusses ethics in public life. Thus Thiruvalluvar gives more importance to righteous living in public life.\n\n\n\n
+
+
+    </string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_notification_detail">NotificationDetailActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+
+
+    <string name="prefDailyKuralNotification">prefDailyKuralNotification</string>
+    <string name="title_activity_search">SearchActivity</string>
+
+    <string name="search_title">Search</string>
+    <string name="today_kural">இன்றைய குறள் </string>
+    <string name="search_hint">Chapter or Couplet No</string>
+    <string name="notification_channel_name">Daily Thirukkural</string>
+    <string name="notification_channel_desc">Daily Thirukkural couplet notification</string>
+</resources>
+
