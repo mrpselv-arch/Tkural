@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,6 +33,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.webkit.WebViewAssetLoader;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -50,6 +57,7 @@ public class NavigationActivity extends AppCompatActivity
 
     TextView aboutThirukkural;
     NavigationView navigationView;
+    WebView mWebView;
     private static final int NOTIFICATION_PERMISSION_CODE = 101;
 
     @Override
@@ -71,19 +79,49 @@ public class NavigationActivity extends AppCompatActivity
         // Android 13+ / 14 notification permission check
         checkNotificationPermission();
 
+        mWebView = findViewById(R.id.main_webview);
+        setupWebView();
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            int itemId = bundle.getInt(ItemListFragment.NAV_ITEM_ID);
-            int resId = getResourceId("chapter_" + itemId, "id", getPackageName());
-            Log.d("navi bundle is:", resId + ":" + itemId);
-
-            if (itemId < navigationView.getMenu().size()) {
-                this.onNavigationItemSelected(navigationView.getMenu().getItem(itemId).setChecked(true));
+            int itemId = bundle.getInt(ItemListFragment.NAV_ITEM_ID, 1);
+            if (itemId > 0 && mWebView != null) {
+                mWebView.evaluateJavascript("if (window.openChapter) { window.openChapter(" + itemId + "); }", null);
             }
-        } else {
-            AboutFragment about = new AboutFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_list_fragment_layout, about).commit();
         }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void setupWebView() {
+        if (mWebView == null) return;
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setLoadsImagesAutomatically(true);
+        settings.setMediaPlaybackRequiresUserGesture(false);
+
+        final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .build();
+
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                return assetLoader.shouldInterceptRequest(request.getUrl());
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                if (failingUrl != null && !failingUrl.startsWith("file://")) {
+                    view.loadUrl("file:///android_asset/index.html");
+                }
+            }
+        });
+
+        mWebView.loadUrl("https://appassets.androidplatform.net/assets/index.html");
     }
 
     private void checkNotificationPermission() {
@@ -108,6 +146,8 @@ public class NavigationActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (mWebView != null && mWebView.canGoBack()) {
+            mWebView.goBack();
         } else {
             super.onBackPressed();
         }
@@ -147,28 +187,23 @@ public class NavigationActivity extends AppCompatActivity
         setTitle(item.getTitle());
 
         if (id == R.id.thiruvalluvar) {
-            AboutFragment about = new AboutFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(AboutFragment.ABOUT_TEXT_ID, id);
-            about.setArguments(bundle);
-            navigationView.getMenu().findItem(R.id.thiruvalluvar).setChecked(true);
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_list_fragment_layout, about).commit();
-        } else {
-            ItemListFragment listFragment = new ItemListFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(ItemListFragment.NAV_ITEM_ID, id);
-
-            StringTokenizer tokens = new StringTokenizer(item.getTitle().toString(), ".");
-            String chapter_code = tokens.nextToken();
-            bundle.putString(ItemListFragment.NAV_CHAPTER, chapter_code);
-            bundle.putString(ItemListFragment.NAV_ITEM_TITLE, item.getTitle().toString());
-            listFragment.setArguments(bundle);
-
-            int chap_code = Integer.valueOf(chapter_code);
-            if (chap_code < navigationView.getMenu().size()) {
-                navigationView.getMenu().getItem(chap_code).setChecked(true);
+            if (mWebView != null) {
+                mWebView.evaluateJavascript("if (window.openChapter) { window.openChapter(1); }", null);
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.item_list_fragment_layout, listFragment).commit();
+        } else {
+            String title = item.getTitle() != null ? item.getTitle().toString() : "";
+            StringTokenizer tokens = new StringTokenizer(title, ".");
+            if (tokens.hasMoreTokens()) {
+                String chapter_code = tokens.nextToken().trim();
+                try {
+                    int chapNum = Integer.parseInt(chapter_code);
+                    if (mWebView != null) {
+                        mWebView.evaluateJavascript("if (window.openChapter) { window.openChapter(" + chapNum + "); }", null);
+                    }
+                } catch (NumberFormatException e) {
+                    Log.e("NavigationActivity", "Error parsing chapter: " + chapter_code, e);
+                }
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -71,6 +71,18 @@ export default function App() {
     }
   }, [savedIds]);
 
+  // Expose global function for Android navigation drawer bridge
+  useEffect(() => {
+    (window as any).openChapter = (chapId: number) => {
+      if (chapId >= 1 && chapId <= 133) {
+        setSelectedChapterId(chapId);
+        setCurrentTab('reader');
+        setReaderViewMode('chapter');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+  }, []);
+
   // Fetch Thirukkural data
   useEffect(() => {
     fetch('/data/thirukkural.json')
