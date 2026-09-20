@@ -1,9 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
 
 const jsonPath = path.join(__dirname, '../public/data/thirukkural.json');
 const rawDir = path.join(__dirname, '../android/app/src/main/res/raw');
