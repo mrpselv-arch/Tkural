@@ -1,16 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#b45309" />
-      <stop offset="100%" stop-color="#78350f" />
+      <stop offset="0%" stop-color="#FF9500" />
+      <stop offset="40%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#C2410C" />
     </linearGradient>
     <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef3c7" />
-      <stop offset="100%" stop-color="#fde68a" />
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#FEF3C7" />
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#FEF3C7" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="110" fill="url(#bg)"/>
-  <rect x="24" y="24" width="464" height="464" rx="90" fill="none" stroke="#d97706" stroke-width="8" stroke-opacity="0.4"/>
-  <text x="256" y="325" font-size="250" font-family="'Mukta Malar', 'Noto Sans Tamil', serif" font-weight="bold" text-anchor="middle" fill="url(#gold)">கு</text>
-  <circle cx="256" cy="415" r="12" fill="#fde68a" opacity="0.8"/>
+  <!-- Main Circular Body -->
+  <circle cx="256" cy="256" r="250" fill="url(#bg)"/>
+  <!-- Elegant iOS Inner Concentric Rings -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <circle cx="256" cy="256" r="230" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.25"/>
+  <!-- Classical Tamil 'கு' Character (representing குறள் / Thirukkural) -->
+  <text x="256" y="325" font-size="240" font-family="-apple-system, BlinkMacSystemFont, 'Mukta Malar', 'Plus Jakarta Sans', sans-serif" font-weight="800" text-anchor="middle" fill="url(#gold)" letter-spacing="2">கு</text>
+  <!-- Accent Pearl Dot -->
+  <circle cx="256" cy="415" r="10" fill="#FEF3C7" opacity="0.9"/>
 </svg>

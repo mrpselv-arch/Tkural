@@ -198,7 +198,9 @@ public class NavigationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+            if (mWebView != null) {
+                mWebView.evaluateJavascript("if (window.openSettings) { window.openSettings(); }", null);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

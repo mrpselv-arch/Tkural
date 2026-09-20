@@ -16,6 +16,46 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
+// High-fidelity native Tamil & English speech synthesis proxy
+app.get('/api/tts', async (req, res) => {
+  try {
+    const rawText = (req.query.text as string) || '';
+    const lang = (req.query.lang as string) || 'ta';
+    
+    // Clean up text: replace multiple spaces, remove special abbreviations that sound odd
+    const cleanText = rawText
+      .replace(/[\n\r]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!cleanText) {
+      return res.status(400).json({ error: 'Text parameter is required' });
+    }
+
+    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${encodeURIComponent(lang)}&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+    
+    const response = await fetch(ttsUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    });
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: 'Failed to generate audio' });
+    }
+
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    
+    const arrayBuffer = await response.arrayBuffer();
+    res.send(Buffer.from(arrayBuffer));
+  } catch (err: any) {
+    console.error('TTS error:', err);
+    res.status(500).json({ error: err.message || 'Speech generation failed' });
+  }
+});
+
+
 // Helper to check if path is safely inside android directory
 function isSafePath(targetPath: string): boolean {
   const resolved = path.resolve(ANDROID_DIR, targetPath);

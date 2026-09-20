@@ -1,6 +1,6 @@
 {
   "name": "Thirukkural",
-  "description": "Complete Thirukkural with all 133 chapters, 1330 couplets, commentaries by Mu. Varadarajanar, Solomon Pappaiah, Kalaignar Karunanidhi, and Android source code editor.",
+  "description": "Complete Thirukkural with all 133 chapters, 1330 couplets, native Tamil audio recitation, translations, everyday notifications, and classical commentaries by Mu. Varadarajanar, Solomon Pappaiah, and Kalaignar Karunanidhi.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -45,6 +45,6 @@ export interface AndroidFileNode {
   children?: AndroidFileNode[];
 }
 
-export type TabType = 'reader' | 'daily' | 'search' | 'saved' | 'about' | 'android-editor';
+export type TabType = 'reader' | 'daily' | 'search' | 'saved' | 'about';
 export type CommentaryType = 'muva' | 'solomon' | 'kalaignar' | 'english' | 'all';
 export type LanguageMode = 'ta' | 'en' | 'both';
