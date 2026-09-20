@@ -71,13 +71,8 @@ public class ItemListFragment extends Fragment implements AbsListView.OnItemClic
             InputStream in = getResources().openRawResource(id);
             try {
                 Map<Integer, CoupletsXMLParser.Couplet> coupletsMap = new CoupletsXMLParser().coupletsList(in);
-                couplet_list_to_show = new CoupletsXMLParser.Couplet[10];
-                int i = 0;
-                for (Object key : coupletsMap.keySet()) {
-                    CoupletsXMLParser.Couplet kural = coupletsMap.get(key);
-                    couplet_list_to_show[i] = kural;
-                    i++;
-                    if (i >= 10) break;
+                if (coupletsMap != null && !coupletsMap.isEmpty()) {
+                    couplet_list_to_show = coupletsMap.values().toArray(new CoupletsXMLParser.Couplet[0]);
                 }
             } catch (XmlPullParserException | IOException e) {
                 e.printStackTrace();
@@ -123,8 +118,14 @@ public class ItemListFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener && couplet_list_to_show != null && position < couplet_list_to_show.length) {
-            int navItemId = getArguments() != null ? getArguments().getInt(NAV_ITEM_ID) : 0;
-            mListener.onFragmentInteraction(navItemId, couplet_list_to_show[position]);
+            CoupletsXMLParser.Couplet selectedCouplet = couplet_list_to_show[position];
+            int coupletNum = 0;
+            try {
+                coupletNum = Integer.parseInt(selectedCouplet.getCoupletNumber());
+            } catch (Exception e) {
+                coupletNum = position + 1;
+            }
+            mListener.onFragmentInteraction(coupletNum, selectedCouplet);
         }
     }
 
