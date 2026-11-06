@@ -164,6 +164,21 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    // Listen for Service Worker notification click messages
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      const handleSwMessage = (event: MessageEvent) => {
+        if (event.data?.type === 'NAVIGATE_TAB') {
+          setCurrentTab((event.data.tab as TabType) || 'daily');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+      navigator.serviceWorker.addEventListener('message', handleSwMessage);
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleSwMessage);
+        notificationManager.stopScheduler();
+      };
+    }
+
     notificationManager.startScheduler(() => {
       const now = new Date();
       const start = new Date(now.getFullYear(), 0, 0);
@@ -183,6 +198,17 @@ export default function App() {
       notificationManager.stopScheduler();
     };
   }, [data, languageMode]);
+
+  // Handle URL query parameter ?tab=daily from notification launches
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam === 'daily' || tabParam === 'reader' || tabParam === 'search' || tabParam === 'saved' || tabParam === 'about') {
+        setCurrentTab(tabParam as TabType);
+      }
+    }
+  }, []);
 
   // Precompute flattened couplets list with chapter info
   const allCoupletsWithChapter = useMemo(() => {
